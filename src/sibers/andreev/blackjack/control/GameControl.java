@@ -1,5 +1,7 @@
 package sibers.andreev.blackjack.control;
 
+import sibers.andreev.blackjack.control.res.CardsControl;
+import sibers.andreev.blackjack.control.res.WinnersControl;
 import sibers.andreev.blackjack.interfaces.GameAction;
 import sibers.andreev.blackjack.res.Card;
 import sibers.andreev.blackjack.res.Dealer;
@@ -9,14 +11,14 @@ import sibers.andreev.blackjack.res.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static sibers.andreev.blackjack.control.CardsControl.giveCard;
-import static sibers.andreev.blackjack.control.CardsControl.isGiveCardBots;
+import static sibers.andreev.blackjack.control.res.CardsControl.giveCard;
+import static sibers.andreev.blackjack.control.res.CardsControl.isGiveCardBots;
 
 public class GameControl {
 
     private int bet;
-    private ArrayList<Card> gameDeck;
     private int moneyInBank;
+    private ArrayList<Card> gameDeck;
     private Player firstPlayer;
     private Player secondPlayer;
     private Player thirdPlayer;
@@ -67,17 +69,18 @@ public class GameControl {
         winnerList = WinnersControl.getFinalList(firstPlayer, secondPlayer, thirdPlayer, dealer);
 
         getWinners(winnerList, firstPlayer, secondPlayer, thirdPlayer, dealer, true);
+        // последний аргумент правдив, что бы была возможность показать случай, когда победителей нет.
     }
 
     private void placeBet(Dealer dealer, Player firstPlayer, Player secondPlayer, Player thirdPlayer) {
         int betCounter = 0;
-        secondPlayer.setMoney(dealer.getMoney() - bet);
+        firstPlayer.setMoney(firstPlayer.getMoney() - bet);
         betCounter++;
-        thirdPlayer.setMoney(dealer.getMoney() - bet);
+        secondPlayer.setMoney(secondPlayer.getMoney() - bet);
+        betCounter++;
+        thirdPlayer.setMoney(thirdPlayer.getMoney() - bet);
         betCounter++;
         dealer.setMoney(dealer.getMoney() - bet);
-        betCounter++;
-        firstPlayer.setMoney(firstPlayer.getMoney() - bet);
         betCounter++;
         moneyInBank = bet * betCounter;
     }
@@ -85,6 +88,7 @@ public class GameControl {
     private void getAction(Player player, ArrayList<Card> deck) {
         if (player.isUser()) {
             boolean isChoice = GameAction.isChoicePlayer(player, new boolean[]{true, false});
+            //В массива булеанов: первый элемент - взял карту или нет, второй элемент - перебор или хватит.
             while (isChoice) {
                 isChoice = GameAction.isChoicePlayer(player, new boolean[]{true, giveCard(player, deck)});
             }
@@ -93,9 +97,9 @@ public class GameControl {
         while (true) {
             boolean[] isChoiceBot = isGiveCardBots(player, deck);
             if (isChoiceBot[0]) {
-                GameAction.showChoiceBot(isChoiceBot, player);
+                GameAction.showChoicePlayer(isChoiceBot, player);
             } else {
-                GameAction.showChoiceBot(isChoiceBot, player);
+                GameAction.showChoicePlayer(isChoiceBot, player);
                 return;
             }
         }

@@ -33,10 +33,10 @@ public class GameAction {
         }
         String secondPlayerCards = "Карты (%s):%n" + secondPlayer.toString() + "%n";
         String thirdPlayerCards = "Карты (%s):%n" + thirdPlayer.toString() + "%n";
-        System.out.printf(firstPlayerCards,firstPlayer.getName());
-        System.out.printf(secondPlayerCards,secondPlayer.getName());
-        System.out.printf(thirdPlayerCards,thirdPlayer.getName());
-        System.out.printf(dealerCards +"----------------%n");
+        System.out.printf(firstPlayerCards, firstPlayer.getName());
+        System.out.printf(secondPlayerCards, secondPlayer.getName());
+        System.out.printf(thirdPlayerCards, thirdPlayer.getName());
+        System.out.printf(dealerCards + "----------------%n");
     }
 
     public static void showWinners(ArrayList<Player> winnersList) {
@@ -55,7 +55,7 @@ public class GameAction {
         System.out.printf("%nСумма в банке: %d%n", bank);
     }
 
-    public static boolean showNoWinners(){
+    public static boolean showNoWinners() {
         Scanner scanner = new Scanner(System.in);
         System.out.printf("Победителей нет%nПродолжить?%n1 - Да%n2 - Нет%n");
         int choice = scanner.nextInt();
@@ -66,6 +66,45 @@ public class GameAction {
         } else {
             System.out.printf("Неверная команда");
             showNoWinners();
+        }
+        return false;
+    }
+
+    public static void showChoicePlayer(boolean choice[], Player player) {
+        if (choice.length != 3) {
+            if (choice[1]) {
+                if (choice[0]) {
+                    System.out.printf("%n%s: взял карту%n", player.getName());
+                    System.out.printf(player.toString());
+                } else {
+                    System.out.printf("%n%s: остановился%n______%n", player.getName());
+                }
+            } else {
+                System.out.printf("%n%s: перебор%n______%n", player.getName());
+            }
+        }
+    }
+
+    public static boolean isChoicePlayer(Player player, boolean[] isChoice) {
+        if (isChoice[1]) {
+            GameAction.showChoicePlayer(new boolean[]{true, true}, player);
+            GameAction.showChoicePlayer(new boolean[]{false, false}, player);
+            return false;
+        }
+        Scanner scanner = new Scanner(System.in);
+        String fail = "Неверная команда";
+        String choiceText = "%n1 - Взять карту%n2 - Хватит%n";
+        String cards = "%n%s%n" + player.toString() + choiceText;
+        System.out.printf(cards, player.getName());
+        int choice = scanner.nextInt();
+        if (choice == 1) {
+            return true;
+        } else if (choice == 2) {
+            System.out.printf("%n%s: остановился%n______%n", player.getName());
+            return false;
+        } else {
+            System.out.println(fail);
+            isChoicePlayer(player, isChoice);
         }
         return false;
     }
@@ -88,45 +127,6 @@ public class GameAction {
         } else {
             System.out.printf("Неверная команда");
             isStatusEndRound(firstPlayer, secondPlayer, thirdPlayer);
-        }
-        return false;
-    }
-
-    public static void showChoiceBot(boolean choice[], Player bot) {
-        if (choice.length != 3) {
-            if (choice[1]) {
-                if (choice[0]) {
-                    System.out.printf("%n%s: взял карту%n", bot.getName());
-                    System.out.printf(bot.toString());
-                } else {
-                    System.out.printf("%n%s: остановился%n______%n", bot.getName());
-                }
-            } else {
-                System.out.printf("%n%s: перебор%n______%n", bot.getName());
-            }
-        }
-    }
-
-    public static boolean isChoicePlayer(Player player, boolean[] isChoice) {
-        if (isChoice[1]) {
-            GameAction.showChoiceBot(new boolean[]{true, true}, player);
-            GameAction.showChoiceBot(new boolean[]{false, false}, player);
-            return false;
-        }
-        Scanner scanner = new Scanner(System.in);
-        String fail = "Неверная команда";
-        String choiceText = "%n1 - Взять карту%n2 - Хватит%n";
-        String cards = "%n%s%n" + player.toString() + choiceText;
-        System.out.printf(cards,player.getName());
-        int choice = scanner.nextInt();
-        if (choice == 1) {
-            return true;
-        } else if (choice == 2) {
-            System.out.printf("%n%s: остановился%n______%n", player.getName());
-            return false;
-        } else {
-            System.out.println(fail);
-            isChoicePlayer(player, isChoice);
         }
         return false;
     }

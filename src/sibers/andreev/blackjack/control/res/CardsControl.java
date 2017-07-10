@@ -1,4 +1,4 @@
-package sibers.andreev.blackjack.control;
+package sibers.andreev.blackjack.control.res;
 
 import sibers.andreev.blackjack.res.Card;
 import sibers.andreev.blackjack.res.Player;
@@ -13,6 +13,7 @@ public class CardsControl {
         player.getCardsOnHand().add(deck.get(deck.size() - 1));
         deck.remove(deck.size() - 1);
         checkAce(player);
+        //Подсчет очков происходит только при проверке тузов, а та, в своб очередь, запускается всегда при изменении карт на руке
         return !(player.getPoints() <= victoryPoints);
     }
 
@@ -56,6 +57,7 @@ public class CardsControl {
         }
         player.setPoints(points);
         ArrayList<Integer> aceList = new ArrayList<>(Arrays.asList(1, 40, 14, 27));
+        // Номера тузов в колоде, что-то вроже миниХеш кода.
         for (Card e : player.getCardsOnHand()) {
             if (aceList.contains(e.getNumber())) {
                 if (player.getPoints() > 21) {

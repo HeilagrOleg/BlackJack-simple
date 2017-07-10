@@ -1,4 +1,4 @@
-package sibers.andreev.blackjack.control;
+package sibers.andreev.blackjack.control.res;
 
 import sibers.andreev.blackjack.res.Dealer;
 import sibers.andreev.blackjack.res.Player;
@@ -10,6 +10,7 @@ public class WinnersControl {
 
     public static ArrayList<Player> getWinnersListBlackJack(Player firstPlayer, Player secondPlayer, Player thirdPlayer, Dealer dealer) {
         int blackJack = 21;
+
         ArrayList<Player> winnersList = new ArrayList<>();
 
         if (firstPlayer.getPoints() == blackJack) {
